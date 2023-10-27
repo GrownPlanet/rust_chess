@@ -6,8 +6,13 @@ use sdl2::video::Window;
 pub struct Board {}
 
 impl Board {
-    pub fn draw_empty_board(canvas: &mut Canvas<Window>, window_size: i32) -> Result<(), String> {
-        let tile_size = window_size / 8;
+    pub fn draw_empty_board(
+        canvas: &mut Canvas<Window>,
+        board_size: u32,
+        dark_color: Color,
+        light_color: Color,
+    ) -> Result<(), String> {
+        let tile_size = board_size / 8;
         for x in 0..8 {
             for y in 0..8 {
                 let rect = Rect::new(
@@ -18,9 +23,9 @@ impl Board {
                 );
 
                 if (x + y) % 2 == 0 {
-                    canvas.set_draw_color(Color::RGB(200, 200, 200));
+                    canvas.set_draw_color(light_color);
                 } else {
-                    canvas.set_draw_color(Color::RGB(80, 40, 10));
+                    canvas.set_draw_color(dark_color);
                 }
 
                 canvas.fill_rect(rect)?;
