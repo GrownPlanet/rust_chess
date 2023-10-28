@@ -16,7 +16,8 @@ use board::Board;
 pub mod board;
 
 pub fn main() -> Result<(), String> {
-    let board_size = 800;
+    let tile_size = 100;
+    let board_size = 8 * tile_size;
 
     let dark_color = Color::RGB(34, 32, 52);
     let light_color = Color::RGB(255, 255, 255);
@@ -65,7 +66,7 @@ pub fn main() -> Result<(), String> {
 
         // check if wanting to select a piece
         if mouse_state.left() {
-            board_coords = pos_to_board_coords(mouse_state.x(), mouse_state.y(), board_size as i32);
+            board_coords = pos_to_board_coords(mouse_state.x(), mouse_state.y(), tile_size as i32);
 
             if legal_moves.contains(&board_coords) {
                 board.move_piece(selected_piece, board_coords);
@@ -76,8 +77,8 @@ pub fn main() -> Result<(), String> {
 
         canvas.set_blend_mode(BlendMode::None);
 
-        Board::draw_empty_board(&mut canvas, board_size, dark_color, light_color)?;
-        board.draw_pieces(&mut canvas, &pieces_texture, board_size)?;
+        Board::draw_empty_board(&mut canvas, tile_size, dark_color, light_color)?;
+        board.draw_pieces(&mut canvas, &pieces_texture, tile_size)?;
 
         legal_moves = board.get_moves(board_coords.0, board_coords.1);
 
@@ -95,11 +96,9 @@ pub fn main() -> Result<(), String> {
     Ok(())
 }
 
-fn pos_to_board_coords(x: i32, y: i32, board_size: i32) -> (usize, usize) {
-    let ts = board_size / 8;
-
-    let bx = x / ts;
-    let by = y / ts;
+fn pos_to_board_coords(x: i32, y: i32, tile_size: i32) -> (usize, usize) {
+    let bx = x / tile_size;
+    let by = y / tile_size;
 
     (bx as usize, by as usize)
 }

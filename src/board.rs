@@ -41,11 +41,10 @@ impl Board {
 
     pub fn draw_empty_board(
         canvas: &mut Canvas<Window>,
-        board_size: u32,
+        tile_size: u32,
         dark_color: Color,
         light_color: Color,
     ) -> Result<(), String> {
-        let tile_size = board_size / 8;
         for x in 0..8 {
             for y in 0..8 {
                 let rect = Rect::new(
@@ -71,15 +70,18 @@ impl Board {
         &self,
         canvas: &mut Canvas<Window>,
         texture: &Texture,
-        board_size: u32,
+        tile_size: u32,
     ) -> Result<(), String> {
-        let ts = (board_size / 8) as i32;
-
         for y in 0..8 {
             for x in 0..8 {
                 let piece = self.board[y][x];
 
-                let dst = Rect::new(x as i32 * ts, y as i32 * ts, ts as u32, ts as u32);
+                let dst = Rect::new(
+                    x as i32 * tile_size as i32,
+                    y as i32 * tile_size as i32,
+                    tile_size,
+                    tile_size,
+                );
 
                 let src = match piece {
                     0 => continue,
