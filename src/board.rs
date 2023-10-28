@@ -71,7 +71,7 @@ impl Board {
                 );
 
                 let src = match piece {
-                    0 => Rect::new(0, 0, 0, 0),
+                    0 => continue,
                     1 => Rect::new(0, 0, 32, 32),
                     7 => Rect::new(0, 32, 32, 32),
                     _ => return Err(String::from("piece not found")),
