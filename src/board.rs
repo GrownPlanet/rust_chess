@@ -26,14 +26,14 @@ pub struct Board {
 impl Board {
     pub fn default() -> Self {
         let board = [
-            [BR, BB, BH, BQ, BK, BH, BB, BR],
+            [BR, BH, BB, BQ, BK, BB, BH, BR],
             [BP, BP, BP, BP, BP, BP, BP, BP],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [WP, WP, WP, WP, WP, WP, WP, WP],
-            [WR, WB, WH, WQ, WK, WH, WB, WR],
+            [WR, WH, WB, WQ, WK, WB, WH, WR],
         ];
 
         Self { board }
@@ -179,7 +179,7 @@ impl Board {
     }
 
     pub fn get_piece_color(&self, (x, y): (usize, usize)) -> i32 {
-        if self.board[y][x] < 6 {
+        if self.board[y][x] <= 6 {
             return 1;
         }
         return -1;
