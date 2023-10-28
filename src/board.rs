@@ -5,19 +5,19 @@ use sdl2::video::Window;
 
 const _WP: i32 = 1;
 const _WH: i32 = 2;
-const _WB: i32 = 3;
+const WB: i32 = 3;
 const WR: i32 = 4;
 const _WQ: i32 = 5;
 const _WK: i32 = 6;
 const _BP: i32 = 7;
 const _BH: i32 = 8;
-const _BB: i32 = 9;
+const BB: i32 = 9;
 const BR: i32 = 10;
 const _BQ: i32 = 11;
 const _BK: i32 = 12;
 
-const W_PIECES: [i32; 6] = [_WP, _WH, _WB, WR, _WQ, _WK];
-const B_PIECES: [i32; 6] = [_BP, _BH, _BB, BR, _BQ, _BK];
+const W_PIECES: [i32; 6] = [_WP, _WH, WB, WR, _WQ, _WK];
+const B_PIECES: [i32; 6] = [_BP, _BH, BB, BR, _BQ, _BK];
 
 pub struct Board {
     board: [[i32; 8]; 8],
@@ -39,8 +39,8 @@ impl Board {
         let mut board = [[0; 8]; 8];
         board[4][2] = WR;
         board[4][1] = BR;
-        board[7][3] = WR;
-        board[1][6] = BR;
+        board[7][3] = WB;
+        board[1][6] = BB;
 
         Self { board }
     }
@@ -114,7 +114,13 @@ impl Board {
 
         let mut return_vec = vec![];
 
-        for (dir_x, dir_y) in [(0, 1), (1, 0), (0, -1), (-1, 0)] {
+        let dirs = match piece {
+            WR | BR => vec![(0, 1), (1, 0), (0, -1), (-1, 0)],
+            WB | BB => vec![(1, 1), (-1, 1), (1, -1), (-1, -1)],
+            _ => vec![],
+        };
+
+        for (dir_x, dir_y) in dirs {
             for i in 1..8 {
                 let new_x = (x as i32 + dir_x * i) as usize;
                 let new_y = (y as i32 + dir_y * i) as usize;
