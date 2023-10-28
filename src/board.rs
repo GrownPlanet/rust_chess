@@ -10,14 +10,14 @@ pub struct Board {
 impl Board {
     pub fn default() -> Self {
         let board = [
-            [0, 0, 0, 0, 0, 0, 0, 0],
+            [10, 9, 8, 11, 12, 8, 9, 10],
             [7, 7, 7, 7, 7, 7, 7, 7],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0],
             [1, 1, 1, 1, 1, 1, 1, 1],
-            [0, 0, 0, 0, 0, 0, 0, 0],
+            [4, 3, 2, 5, 6, 2, 3, 4],
         ];
 
         Self { board }
@@ -59,8 +59,8 @@ impl Board {
     ) -> Result<(), String> {
         let tile_size = (board_size / 8) as i32;
 
-        for x in 0..8 {
-            for y in 0..8 {
+        for y in 0..8 {
+            for x in 0..8 {
                 let piece = self.board[y][x];
 
                 let dst = Rect::new(
@@ -72,8 +72,8 @@ impl Board {
 
                 let src = match piece {
                     0 => continue,
-                    1 => Rect::new(0, 0, 32, 32),
-                    7 => Rect::new(0, 32, 32, 32),
+                    1..=6 => Rect::new(32 * (piece - 1), 0, 32, 32),
+                    7..=12 => Rect::new(32 * (piece - 7), 32, 32, 32),
                     _ => return Err(String::from("piece not found")),
                 };
 
