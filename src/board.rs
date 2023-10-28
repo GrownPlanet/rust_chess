@@ -16,6 +16,9 @@ const BR: i32 = 10;
 const _BQ: i32 = 11;
 const _BK: i32 = 12;
 
+const W_PIECES: [i32; 6] = [_WP, _WH, _WB, WR, _WQ, _WK];
+const B_PIECES: [i32; 6] = [_BP, _BH, _BB, BR, _BQ, _BK];
+
 pub struct Board {
     board: [[i32; 8]; 8],
 }
@@ -109,27 +112,53 @@ impl Board {
         let mut return_vec = vec![];
 
         match piece {
-            WR | BR => {
+            WR => {
                 for k in (0..x).rev() {
-                    if self.board[y][k] != 0 {
+                    if W_PIECES.contains(&self.board[y][k]) {
                         break;
                     }
                     return_vec.push((k, y))
                 }
                 for k in (x + 1)..8 {
-                    if self.board[y][k] != 0 {
+                    if W_PIECES.contains(&self.board[y][k]) {
                         break;
                     }
                     return_vec.push((k, y))
                 }
                 for k in (0..y).rev() {
-                    if self.board[k][x] != 0 {
+                    if W_PIECES.contains(&self.board[k][x]) {
                         break;
                     }
                     return_vec.push((x, k))
                 }
                 for k in (y + 1)..8 {
-                    if self.board[k][x] != 0 {
+                    if W_PIECES.contains(&self.board[k][x]) {
+                        break;
+                    }
+                    return_vec.push((x, k))
+                }
+            }
+            BR => {
+                for k in (0..x).rev() {
+                    if B_PIECES.contains(&self.board[y][k]) {
+                        break;
+                    }
+                    return_vec.push((k, y))
+                }
+                for k in (x + 1)..8 {
+                    if B_PIECES.contains(&self.board[y][k]) {
+                        break;
+                    }
+                    return_vec.push((k, y))
+                }
+                for k in (0..y).rev() {
+                    if B_PIECES.contains(&self.board[k][x]) {
+                        break;
+                    }
+                    return_vec.push((x, k))
+                }
+                for k in (y + 1)..8 {
+                    if B_PIECES.contains(&self.board[k][x]) {
                         break;
                     }
                     return_vec.push((x, k))
