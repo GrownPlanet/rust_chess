@@ -12,7 +12,7 @@ const _WK: i32 = 6;
 const _BP: i32 = 7;
 const _BH: i32 = 8;
 const _BB: i32 = 9;
-const _BR: i32 = 10;
+const BR: i32 = 10;
 const _BQ: i32 = 11;
 const _BK: i32 = 12;
 
@@ -95,6 +95,28 @@ impl Board {
     }
 
     pub fn get_moves(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
-        vec![(4, 3), (4, 2)]
+        let piece = self.board[y][x];
+
+        if piece == 0 {
+            return vec![];
+        }
+
+        let mut return_vec = vec![];
+
+        match piece {
+            WR | BR => {
+                for k in 0..8 {
+                    if k != x {
+                        return_vec.push((x, k));
+                    }
+                    if k != y {
+                        return_vec.push((k, y));
+                    }
+                }
+            }
+            _ => (),
+        }
+
+        return_vec
     }
 }
