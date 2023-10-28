@@ -107,7 +107,6 @@ impl Board {
 
         match piece {
             WR | BR => {
-                println!("ROOK");
                 for k in 0..x {
                     return_vec.push((k, y))
                 }
