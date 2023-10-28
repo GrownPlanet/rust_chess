@@ -93,4 +93,8 @@ impl Board {
         }
         Ok(())
     }
+
+    pub fn get_moves(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
+        vec![(4, 3), (4, 2)]
+    }
 }

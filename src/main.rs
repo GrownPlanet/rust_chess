@@ -4,6 +4,8 @@ use sdl2::event::Event;
 use sdl2::image::LoadTexture;
 use sdl2::keyboard::Keycode;
 use sdl2::pixels::Color;
+use sdl2::rect::Rect;
+use sdl2::render::BlendMode;
 
 use std::path::Path;
 use std::time::Duration;
@@ -50,8 +52,17 @@ pub fn main() -> Result<(), String> {
             }
         }
 
+        canvas.set_blend_mode(BlendMode::None);
         Board::draw_empty_board(&mut canvas, board_size, dark_color, light_color)?;
         board.draw_pieces(&mut canvas, &pieces_texture, board_size)?;
+
+        let legal_moves = board.get_moves(4, 4);
+
+        canvas.set_blend_mode(BlendMode::Mul);
+        for m in legal_moves {
+            canvas.set_draw_color(Color::RGB(200, 50, 50));
+            canvas.fill_rect(Rect::new(m.0 as i32 * 100, m.1 as i32 * 100, 100, 100))?;
+        }
 
         canvas.present();
         ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 30));
