@@ -35,6 +35,9 @@ impl Board {
 
         let mut board = [[0; 8]; 8];
         board[4][2] = WR;
+        board[4][1] = BR;
+        board[7][3] = WR;
+        board[1][6] = BR;
 
         Self { board }
     }
@@ -133,5 +136,9 @@ impl Board {
 
     pub fn is_piece(&self, (x, y): (usize, usize)) -> bool {
         self.board[y][x] != 0
+    }
+
+    pub fn get_piece(&self, (x, y): (usize, usize)) -> i32 {
+        self.board[y][x]
     }
 }

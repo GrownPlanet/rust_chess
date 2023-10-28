@@ -72,15 +72,6 @@ pub fn main() -> Result<(), String> {
                 mouse_state.y(),
                 tile_size as i32,
             ));
-
-            match selected_square {
-                Some(square) => {
-                    if board.is_piece(square) {
-                        selected_piece = selected_square;
-                    }
-                }
-                None => (),
-            }
         }
 
         match selected_square {
@@ -94,6 +85,10 @@ pub fn main() -> Result<(), String> {
                         }
                     }
                     None => (),
+                }
+
+                if board.is_piece(square) {
+                    selected_piece = selected_square;
                 }
 
                 legal_moves = board.get_moves(square);
@@ -121,7 +116,7 @@ pub fn main() -> Result<(), String> {
         }
 
         canvas.present();
-        ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 30));
+        std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 30));
     }
 
     Ok(())
