@@ -137,8 +137,4 @@ impl Board {
     pub fn is_piece(&self, (x, y): (usize, usize)) -> bool {
         self.board[y][x] != 0
     }
-
-    pub fn get_piece(&self, (x, y): (usize, usize)) -> i32 {
-        self.board[y][x]
-    }
 }
