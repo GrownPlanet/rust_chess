@@ -42,7 +42,7 @@ pub fn main() -> Result<(), String> {
     let board = Board::default();
 
     let mut mouse_state;
-    let mut board_coords;
+    let mut board_coords = (0, 0);
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -57,7 +57,10 @@ pub fn main() -> Result<(), String> {
         }
 
         mouse_state = MouseState::new(&event_pump);
-        board_coords = pos_to_board_coords(mouse_state.x(), mouse_state.y(), board_size as i32);
+
+        if mouse_state.left() {
+            board_coords = pos_to_board_coords(mouse_state.x(), mouse_state.y(), board_size as i32);
+        }
 
         canvas.set_blend_mode(BlendMode::None);
         Board::draw_empty_board(&mut canvas, board_size, dark_color, light_color)?;
