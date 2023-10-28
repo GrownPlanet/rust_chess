@@ -107,13 +107,18 @@ impl Board {
 
         match piece {
             WR | BR => {
-                for k in 0..8 {
-                    if k != y {
-                        return_vec.push((x, k));
-                    }
-                    if k != x {
-                        return_vec.push((k, y));
-                    }
+                println!("ROOK");
+                for k in 0..x {
+                    return_vec.push((k, y))
+                }
+                for k in (x + 1)..8 {
+                    return_vec.push((k, y))
+                }
+                for k in 0..y {
+                    return_vec.push((x, k))
+                }
+                for k in (y + 1)..8 {
+                    return_vec.push((x, k))
                 }
             }
             _ => (),

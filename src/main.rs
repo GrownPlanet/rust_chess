@@ -40,14 +40,14 @@ pub fn main() -> Result<(), String> {
 
     let pieces_texture = texture_creator.load_texture(Path::new("assets/pieces.png"))?;
 
-    let mut board = Board::default();
+    let board = Board::default();
 
     let mut mouse_state;
 
-    let mut selected_piece = (0, 0);
+    // let mut selected_piece = (0, 0);
     let mut board_coords = (0, 0);
 
-    let mut legal_moves = vec![];
+    let mut legal_moves;
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -68,11 +68,11 @@ pub fn main() -> Result<(), String> {
         if mouse_state.left() {
             board_coords = pos_to_board_coords(mouse_state.x(), mouse_state.y(), tile_size as i32);
 
-            if legal_moves.contains(&board_coords) {
-                board.move_piece(selected_piece, board_coords);
-            }
+            // if legal_moves.contains(&board_coords) {
+            //     board.move_piece(selected_piece, board_coords);
+            // }
 
-            selected_piece = board_coords;
+            // selected_piece = board_coords;
         }
 
         canvas.set_blend_mode(BlendMode::None);
