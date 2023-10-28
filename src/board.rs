@@ -3,22 +3,38 @@ use sdl2::rect::Rect;
 use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
+const _WP: i32 = 1;
+const _WH: i32 = 2;
+const _WB: i32 = 3;
+const WR: i32 = 4;
+const _WQ: i32 = 5;
+const _WK: i32 = 6;
+const _BP: i32 = 7;
+const _BH: i32 = 8;
+const _BB: i32 = 9;
+const _BR: i32 = 10;
+const _BQ: i32 = 11;
+const _BK: i32 = 12;
+
 pub struct Board {
     board: [[i32; 8]; 8],
 }
 
 impl Board {
     pub fn default() -> Self {
-        let board = [
-            [10, 9, 8, 11, 12, 8, 9, 10],
-            [7, 7, 7, 7, 7, 7, 7, 7],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0],
-            [1, 1, 1, 1, 1, 1, 1, 1],
-            [4, 3, 2, 5, 6, 2, 3, 4],
-        ];
+        // let board = [
+        //     [10, 9, 8, 11, 12, 8, 9, 10],
+        //     [7, 7, 7, 7, 7, 7, 7, 7],
+        //     [0, 0, 0, 0, 0, 0, 0, 0],
+        //     [0, 0, 0, 0, 0, 0, 0, 0],
+        //     [0, 0, 0, 0, 0, 0, 0, 0],
+        //     [0, 0, 0, 0, 0, 0, 0, 0],
+        //     [1, 1, 1, 1, 1, 1, 1, 1],
+        //     [4, 3, 2, 5, 6, 2, 3, 4],
+        // ];
+
+        let mut board = [[0; 8]; 8];
+        board[4][4] = WR;
 
         Self { board }
     }
