@@ -34,7 +34,7 @@ impl Board {
         // ];
 
         let mut board = [[0; 8]; 8];
-        board[4][4] = WR;
+        board[4][2] = WR;
 
         Self { board }
     }
@@ -106,10 +106,10 @@ impl Board {
         match piece {
             WR | BR => {
                 for k in 0..8 {
-                    if k != x {
+                    if k != y {
                         return_vec.push((x, k));
                     }
-                    if k != y {
+                    if k != x {
                         return_vec.push((k, y));
                     }
                 }
@@ -118,5 +118,10 @@ impl Board {
         }
 
         return_vec
+    }
+
+    pub fn move_piece(&mut self, from: (usize, usize), to: (usize, usize)) {
+        self.board[to.1][to.0] = self.board[from.1][from.0];
+        self.board[from.1][from.0] = 0;
     }
 }

@@ -39,10 +39,14 @@ pub fn main() -> Result<(), String> {
 
     let pieces_texture = texture_creator.load_texture(Path::new("assets/pieces.png"))?;
 
-    let board = Board::default();
+    let mut board = Board::default();
 
     let mut mouse_state;
+
+    let mut selected_piece = (0, 0);
     let mut board_coords = (0, 0);
+
+    let mut legal_moves = vec![];
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -56,20 +60,30 @@ pub fn main() -> Result<(), String> {
             }
         }
 
+        // get mouse state
         mouse_state = MouseState::new(&event_pump);
 
+        // check if wanting to select a piece
         if mouse_state.left() {
             board_coords = pos_to_board_coords(mouse_state.x(), mouse_state.y(), board_size as i32);
+
+            if legal_moves.contains(&board_coords) {
+                board.move_piece(selected_piece, board_coords);
+            }
+
+            selected_piece = board_coords;
         }
 
         canvas.set_blend_mode(BlendMode::None);
+
         Board::draw_empty_board(&mut canvas, board_size, dark_color, light_color)?;
         board.draw_pieces(&mut canvas, &pieces_texture, board_size)?;
 
-        let legal_moves = board.get_moves(board_coords.0, board_coords.1);
+        legal_moves = board.get_moves(board_coords.0, board_coords.1);
 
         canvas.set_blend_mode(BlendMode::Mul);
-        for m in legal_moves {
+
+        for m in &legal_moves {
             canvas.set_draw_color(Color::RGB(200, 50, 50));
             canvas.fill_rect(Rect::new(m.0 as i32 * 100, m.1 as i32 * 100, 100, 100))?;
         }
