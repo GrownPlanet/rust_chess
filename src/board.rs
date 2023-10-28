@@ -96,7 +96,7 @@ impl Board {
         Ok(())
     }
 
-    pub fn get_moves(&self, x: usize, y: usize) -> Vec<(usize, usize)> {
+    pub fn get_moves(&self, (x, y): (usize, usize)) -> Vec<(usize, usize)> {
         let piece = self.board[y][x];
 
         if piece == 0 {
@@ -129,5 +129,9 @@ impl Board {
     pub fn move_piece(&mut self, from: (usize, usize), to: (usize, usize)) {
         self.board[to.1][to.0] = self.board[from.1][from.0];
         self.board[from.1][from.0] = 0;
+    }
+
+    pub fn is_piece(&self, (x, y): (usize, usize)) -> bool {
+        self.board[y][x] != 0
     }
 }

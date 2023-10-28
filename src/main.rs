@@ -44,8 +44,8 @@ pub fn main() -> Result<(), String> {
 
     let mut mouse_state;
 
-    let mut selected_piece = (0, 0);
-    let mut board_coords = (0, 0);
+    let mut selected_square: (usize, usize) = (0, 0);
+    let mut selected_piece: Option<(usize, usize)> = None;
 
     let mut legal_moves = vec![];
 
@@ -61,32 +61,51 @@ pub fn main() -> Result<(), String> {
             }
         }
 
+        // ------------------ updating variables ------------------
         // get mouse state
         mouse_state = MouseState::new(&event_pump);
 
         // check if wanting to select a piece
         if mouse_state.left() {
-            board_coords = pos_to_board_coords(mouse_state.x(), mouse_state.y(), tile_size as i32);
-
-            if legal_moves.contains(&board_coords) {
-                board.move_piece(selected_piece, board_coords);
+            if board.is_piece(selected_square) {
+                selected_piece = Some(selected_square);
+            } else {
+                selected_piece = None
             }
 
-            selected_piece = board_coords;
+            selected_square =
+                pos_to_board_coords(mouse_state.x(), mouse_state.y(), tile_size as i32);
         }
+
+        match selected_piece {
+            Some(piece) => {
+                if legal_moves.contains(&selected_square) {
+                    board.move_piece(piece, selected_square);
+                }
+                selected_piece = None;
+            }
+            None => (),
+        }
+
+        legal_moves = board.get_moves(selected_square);
+
+        // ------------------ drawing ------------------
 
         canvas.set_blend_mode(BlendMode::None);
 
         Board::draw_empty_board(&mut canvas, tile_size, dark_color, light_color)?;
         board.draw_pieces(&mut canvas, &pieces_texture, tile_size)?;
 
-        legal_moves = board.get_moves(board_coords.0, board_coords.1);
-
         canvas.set_blend_mode(BlendMode::Mul);
+        canvas.set_draw_color(Color::RGB(200, 50, 50));
 
-        for m in &legal_moves {
-            canvas.set_draw_color(Color::RGB(200, 50, 50));
-            canvas.fill_rect(Rect::new(m.0 as i32 * 100, m.1 as i32 * 100, 100, 100))?;
+        for (x, y) in &legal_moves {
+            canvas.fill_rect(Rect::new(
+                *x as i32 * tile_size as i32,
+                *y as i32 * tile_size as i32,
+                tile_size,
+                tile_size,
+            ))?;
         }
 
         canvas.present();
