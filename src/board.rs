@@ -110,16 +110,28 @@ impl Board {
 
         match piece {
             WR | BR => {
-                for k in 0..x {
+                for k in (0..x).rev() {
+                    if self.board[y][k] != 0 {
+                        break;
+                    }
                     return_vec.push((k, y))
                 }
                 for k in (x + 1)..8 {
+                    if self.board[y][k] != 0 {
+                        break;
+                    }
                     return_vec.push((k, y))
                 }
-                for k in 0..y {
+                for k in (0..y).rev() {
+                    if self.board[k][x] != 0 {
+                        break;
+                    }
                     return_vec.push((x, k))
                 }
                 for k in (y + 1)..8 {
+                    if self.board[k][x] != 0 {
+                        break;
+                    }
                     return_vec.push((x, k))
                 }
             }
