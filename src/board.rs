@@ -105,90 +105,35 @@ impl Board {
     pub fn get_moves(&self, (x, y): (usize, usize)) -> Vec<(usize, usize)> {
         let piece = self.board[y][x];
 
+        let is_white = W_PIECES.contains(&piece);
+        let is_black = B_PIECES.contains(&piece);
+
         if piece == 0 {
             return vec![];
         }
 
         let mut return_vec = vec![];
 
-        match piece {
-            WR => {
-                for k in (0..x).rev() {
-                    if W_PIECES.contains(&self.board[y][k]) {
-                        break;
-                    }
-                    return_vec.push((k, y));
-                    if B_PIECES.contains(&self.board[y][k]) {
-                        break;
-                    }
+        for (dir_x, dir_y) in [(0, 1), (1, 0), (0, -1), (-1, 0)] {
+            for i in 1..8 {
+                let new_x = (x as i32 + dir_x * i) as usize;
+                let new_y = (y as i32 + dir_y * i) as usize;
+
+                if new_x >= 8 || new_y >= 8 {
+                    break;
                 }
-                for k in (x + 1)..8 {
-                    if W_PIECES.contains(&self.board[y][k]) {
-                        break;
+
+                if self.board[new_y][new_x] == 0 {
+                    return_vec.push((new_x, new_y));
+                } else {
+                    if is_white && B_PIECES.contains(&self.board[new_y][new_x]) {
+                        return_vec.push((new_x, new_y));
+                    } else if is_black && W_PIECES.contains(&self.board[new_y][new_x]) {
+                        return_vec.push((new_x, new_y));
                     }
-                    return_vec.push((k, y));
-                    if B_PIECES.contains(&self.board[y][k]) {
-                        break;
-                    }
-                }
-                for k in (0..y).rev() {
-                    if W_PIECES.contains(&self.board[k][x]) {
-                        break;
-                    }
-                    return_vec.push((x, k));
-                    if B_PIECES.contains(&self.board[k][x]) {
-                        break;
-                    }
-                }
-                for k in (y + 1)..8 {
-                    if W_PIECES.contains(&self.board[k][x]) {
-                        break;
-                    }
-                    return_vec.push((x, k));
-                    if B_PIECES.contains(&self.board[k][x]) {
-                        break;
-                    }
+                    break;
                 }
             }
-            BR => {
-                for k in (0..x).rev() {
-                    if B_PIECES.contains(&self.board[y][k]) {
-                        break;
-                    }
-                    return_vec.push((k, y));
-                    if W_PIECES.contains(&self.board[y][k]) {
-                        break;
-                    }
-                }
-                for k in (x + 1)..8 {
-                    if B_PIECES.contains(&self.board[y][k]) {
-                        break;
-                    }
-                    return_vec.push((k, y));
-                    if W_PIECES.contains(&self.board[y][k]) {
-                        break;
-                    }
-                }
-                for k in (0..y).rev() {
-                    if B_PIECES.contains(&self.board[k][x]) {
-                        break;
-                    }
-                    return_vec.push((x, k));
-                    if W_PIECES.contains(&self.board[k][x]) {
-                        break;
-                    }
-                }
-                for k in (y + 1)..8 {
-                    if B_PIECES.contains(&self.board[k][x]) {
-                        break;
-                    }
-                    return_vec.push((x, k));
-                    if W_PIECES.contains(&self.board[k][x]) {
-                        break;
-                    }
-                }
-            }
-            _ => (),
         }
 
         return_vec

@@ -91,8 +91,7 @@ pub fn main() -> Result<(), String> {
                     None => (),
                 }
 
-                if board.is_piece(square) {
-                    //&& board.get_piece_color(square) == color {
+                if board.is_piece(square) && board.get_piece_color(square) == color {
                     selected_piece = selected_square;
                 }
             }
