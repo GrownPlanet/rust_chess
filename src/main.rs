@@ -15,8 +15,8 @@ pub mod board;
 pub fn main() -> Result<(), String> {
     let board_size = 800;
 
-    let dark_color = Color::RGB(168, 121, 100);
-    let light_color = Color::RGB(250, 240, 245);
+    let dark_color = Color::RGB(34, 32, 52);
+    let light_color = Color::RGB(255, 255, 255);
 
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
