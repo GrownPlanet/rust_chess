@@ -49,6 +49,8 @@ pub fn main() -> Result<(), String> {
 
     let mut legal_moves: Vec<(usize, usize)> = vec![];
 
+    let mut color = 1;
+
     'running: loop {
         for event in event_pump.poll_iter() {
             match event {
@@ -82,18 +84,25 @@ pub fn main() -> Result<(), String> {
                             board.move_piece(piece, square);
                             selected_piece = None;
                             selected_square = None;
+
+                            color *= -1;
                         }
                     }
                     None => (),
                 }
 
-                if board.is_piece(square) {
+                if board.is_piece(square) && board.get_piece_color(square) == color {
                     selected_piece = selected_square;
                 }
-
-                legal_moves = board.get_moves(square);
             }
             None => (),
+        }
+
+        match selected_piece {
+            Some(piece) => {
+                legal_moves = board.get_moves(piece);
+            }
+            None => legal_moves = vec![],
         }
 
         // ------------------ drawing ------------------
