@@ -44,10 +44,10 @@ pub fn main() -> Result<(), String> {
 
     let mut mouse_state;
 
-    let mut selected_square: (usize, usize) = (0, 0);
+    let mut selected_square: Option<(usize, usize)> = None;
     let mut selected_piece: Option<(usize, usize)> = None;
 
-    let mut legal_moves = vec![];
+    let mut legal_moves: Vec<(usize, usize)> = vec![];
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -67,27 +67,39 @@ pub fn main() -> Result<(), String> {
 
         // check if wanting to select a piece
         if mouse_state.left() {
-            if board.is_piece(selected_square) {
-                selected_piece = Some(selected_square);
-            } else {
-                selected_piece = None
-            }
+            selected_square = Some(pos_to_board_coords(
+                mouse_state.x(),
+                mouse_state.y(),
+                tile_size as i32,
+            ));
 
-            selected_square =
-                pos_to_board_coords(mouse_state.x(), mouse_state.y(), tile_size as i32);
+            match selected_square {
+                Some(square) => {
+                    if board.is_piece(square) {
+                        selected_piece = selected_square;
+                    }
+                }
+                None => (),
+            }
         }
 
-        match selected_piece {
-            Some(piece) => {
-                if legal_moves.contains(&selected_square) {
-                    board.move_piece(piece, selected_square);
+        match selected_square {
+            Some(square) => {
+                match selected_piece {
+                    Some(piece) => {
+                        if legal_moves.contains(&square) {
+                            board.move_piece(piece, square);
+                            selected_piece = None;
+                            selected_square = None;
+                        }
+                    }
+                    None => (),
                 }
-                selected_piece = None;
+
+                legal_moves = board.get_moves(square);
             }
             None => (),
         }
-
-        legal_moves = board.get_moves(selected_square);
 
         // ------------------ drawing ------------------
 
