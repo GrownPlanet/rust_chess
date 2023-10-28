@@ -7,17 +7,17 @@ const _WP: i32 = 1;
 const _WH: i32 = 2;
 const WB: i32 = 3;
 const WR: i32 = 4;
-const _WQ: i32 = 5;
+const WQ: i32 = 5;
 const _WK: i32 = 6;
 const _BP: i32 = 7;
 const _BH: i32 = 8;
 const BB: i32 = 9;
 const BR: i32 = 10;
-const _BQ: i32 = 11;
+const BQ: i32 = 11;
 const _BK: i32 = 12;
 
-const W_PIECES: [i32; 6] = [_WP, _WH, WB, WR, _WQ, _WK];
-const B_PIECES: [i32; 6] = [_BP, _BH, BB, BR, _BQ, _BK];
+const W_PIECES: [i32; 6] = [_WP, _WH, WB, WR, WQ, _WK];
+const B_PIECES: [i32; 6] = [_BP, _BH, BB, BR, BQ, _BK];
 
 pub struct Board {
     board: [[i32; 8]; 8],
@@ -38,9 +38,11 @@ impl Board {
 
         let mut board = [[0; 8]; 8];
         board[4][2] = WR;
-        board[4][1] = BR;
+        board[7][1] = BR;
         board[7][3] = WB;
-        board[1][6] = BB;
+        board[5][6] = BB;
+        board[0][0] = WQ;
+        board[1][6] = BQ;
 
         Self { board }
     }
@@ -117,6 +119,16 @@ impl Board {
         let dirs = match piece {
             WR | BR => vec![(0, 1), (1, 0), (0, -1), (-1, 0)],
             WB | BB => vec![(1, 1), (-1, 1), (1, -1), (-1, -1)],
+            WQ | BQ => vec![
+                (1, 1),
+                (-1, 1),
+                (1, -1),
+                (-1, -1),
+                (0, 1),
+                (1, 0),
+                (0, -1),
+                (-1, 0),
+            ],
             _ => vec![],
         };
 
