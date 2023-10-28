@@ -3,21 +3,21 @@ use sdl2::rect::Rect;
 use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
-const _WP: i32 = 1;
-const _WH: i32 = 2;
+const WP: i32 = 1;
+const WH: i32 = 2;
 const WB: i32 = 3;
 const WR: i32 = 4;
 const WQ: i32 = 5;
-const _WK: i32 = 6;
-const _BP: i32 = 7;
-const _BH: i32 = 8;
+const WK: i32 = 6;
+const BP: i32 = 7;
+const BH: i32 = 8;
 const BB: i32 = 9;
 const BR: i32 = 10;
 const BQ: i32 = 11;
-const _BK: i32 = 12;
+const BK: i32 = 12;
 
-const W_PIECES: [i32; 6] = [_WP, _WH, WB, WR, WQ, _WK];
-const B_PIECES: [i32; 6] = [_BP, _BH, BB, BR, BQ, _BK];
+const W_PIECES: [i32; 6] = [WP, WH, WB, WR, WQ, WK];
+const B_PIECES: [i32; 6] = [BP, BH, BB, BR, BQ, BK];
 
 pub struct Board {
     board: [[i32; 8]; 8],
@@ -25,24 +25,16 @@ pub struct Board {
 
 impl Board {
     pub fn default() -> Self {
-        // let board = [
-        //     [10, 9, 8, 11, 12, 8, 9, 10],
-        //     [7, 7, 7, 7, 7, 7, 7, 7],
-        //     [0, 0, 0, 0, 0, 0, 0, 0],
-        //     [0, 0, 0, 0, 0, 0, 0, 0],
-        //     [0, 0, 0, 0, 0, 0, 0, 0],
-        //     [0, 0, 0, 0, 0, 0, 0, 0],
-        //     [1, 1, 1, 1, 1, 1, 1, 1],
-        //     [4, 3, 2, 5, 6, 2, 3, 4],
-        // ];
-
-        let mut board = [[0; 8]; 8];
-        board[4][2] = WR;
-        board[7][1] = BR;
-        board[7][3] = WB;
-        board[5][6] = BB;
-        board[0][0] = WQ;
-        board[1][6] = BQ;
+        let board = [
+            [BR, BB, BH, BQ, BK, BH, BB, BR],
+            [BP, BP, BP, BP, BP, BP, BP, BP],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0],
+            [WP, WP, WP, WP, WP, WP, WP, WP],
+            [WR, WB, WH, WQ, WK, WH, WB, WR],
+        ];
 
         Self { board }
     }
@@ -119,7 +111,7 @@ impl Board {
         let dirs = match piece {
             WR | BR => vec![(0, 1), (1, 0), (0, -1), (-1, 0)],
             WB | BB => vec![(1, 1), (-1, 1), (1, -1), (-1, -1)],
-            WQ | BQ => vec![
+            WQ | WK | BQ | BK => vec![
                 (1, 1),
                 (-1, 1),
                 (1, -1),
@@ -129,11 +121,31 @@ impl Board {
                 (0, -1),
                 (-1, 0),
             ],
+            WP => vec![(0, -1)],
+            BP => vec![(0, 1)],
+            BH | WH => vec![
+                (2, 1),
+                (-2, 1),
+                (2, -1),
+                (-2, -1),
+                (1, 2),
+                (2, 1),
+                (1, -2),
+                (-2, 1),
+                (-1, 2),
+                (-1, -2),
+            ],
             _ => vec![],
         };
 
+        let iters = match piece {
+            WR | BR | WB | BB | WQ | BQ => 8,
+            WP | WH | WK | BP | BH | BK => 2,
+            _ => 0,
+        };
+
         for (dir_x, dir_y) in dirs {
-            for i in 1..8 {
+            for i in 1..iters {
                 let new_x = (x as i32 + dir_x * i) as usize;
                 let new_y = (y as i32 + dir_y * i) as usize;
 
