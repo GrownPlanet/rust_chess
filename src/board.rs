@@ -108,7 +108,7 @@ impl Board {
 
         let mut return_vec = vec![];
 
-        let mut dirs = match piece {
+        let dirs = match piece {
             WR | BR => vec![(0, 1), (1, 0), (0, -1), (-1, 0)],
             WB | BB => vec![(1, 1), (-1, 1), (1, -1), (-1, -1)],
             WQ | WK | BQ | BK => vec![
@@ -138,20 +138,41 @@ impl Board {
             _ => vec![],
         };
 
-        let iters = match piece {
+        let mut iters = match piece {
             WR | BR | WB | BB | WQ | BQ => 8,
             WP | WH | WK | BP | BH | BK => 2,
             _ => 0,
         };
 
         if piece == WP && y == 6 {
-            dirs.push((0, -2));
+            iters = 3;
         }
         if piece == BP && y == 1 {
-            dirs.push((0, 2));
+            iters = 3;
         }
 
         for (dir_x, dir_y) in dirs {
+            if piece == WP || piece == BP {
+                let dirs = if is_white {
+                    [(-1, -1), (1, -1)]
+                } else {
+                    [(-1, 1), (1, 1)]
+                };
+                for (dir_x, dir_y) in dirs {
+                    let new_x = (x as i32 + dir_x) as usize;
+                    let new_y = (y as i32 + dir_y) as usize;
+
+                    if new_x >= 8 || new_y >= 8 {
+                        break;
+                    }
+
+                    if is_white && B_PIECES.contains(&self.board[new_y][new_x]) {
+                        return_vec.push((new_x, new_y));
+                    } else if is_black && W_PIECES.contains(&self.board[new_y][new_x]) {
+                        return_vec.push((new_x, new_y));
+                    }
+                }
+            }
             for i in 1..iters {
                 let new_x = (x as i32 + dir_x * i) as usize;
                 let new_y = (y as i32 + dir_y * i) as usize;
@@ -162,14 +183,12 @@ impl Board {
 
                 if self.board[new_y][new_x] == 0 {
                     return_vec.push((new_x, new_y));
-                } else if piece != WP & BP {
+                } else if piece != WP && piece != BP {
                     if is_white && B_PIECES.contains(&self.board[new_y][new_x]) {
                         return_vec.push((new_x, new_y));
                     } else if is_black && W_PIECES.contains(&self.board[new_y][new_x]) {
                         return_vec.push((new_x, new_y));
                     }
-                    break;
-                } else {
                     break;
                 }
             }
