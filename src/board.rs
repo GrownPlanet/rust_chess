@@ -162,12 +162,14 @@ impl Board {
 
                 if self.board[new_y][new_x] == 0 {
                     return_vec.push((new_x, new_y));
-                } else {
+                } else if piece != WP & BP {
                     if is_white && B_PIECES.contains(&self.board[new_y][new_x]) {
                         return_vec.push((new_x, new_y));
                     } else if is_black && W_PIECES.contains(&self.board[new_y][new_x]) {
                         return_vec.push((new_x, new_y));
                     }
+                    break;
+                } else {
                     break;
                 }
             }
