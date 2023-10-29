@@ -108,7 +108,7 @@ impl Board {
 
         let mut return_vec = vec![];
 
-        let dirs = match piece {
+        let mut dirs = match piece {
             WR | BR => vec![(0, 1), (1, 0), (0, -1), (-1, 0)],
             WB | BB => vec![(1, 1), (-1, 1), (1, -1), (-1, -1)],
             WQ | WK | BQ | BK => vec![
@@ -143,6 +143,13 @@ impl Board {
             WP | WH | WK | BP | BH | BK => 2,
             _ => 0,
         };
+
+        if piece == WP && y == 6 {
+            dirs.push((0, -2));
+        }
+        if piece == BP && y == 1 {
+            dirs.push((0, 2));
+        }
 
         for (dir_x, dir_y) in dirs {
             for i in 1..iters {
