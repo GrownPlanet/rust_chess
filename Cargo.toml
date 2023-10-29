@@ -10,3 +10,4 @@ version = "0.35.2"
 features = ["image"]
 
 [dependencies]
+rand = "0.8.5"

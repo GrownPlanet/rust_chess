@@ -15,6 +15,8 @@ use board::Board;
 
 pub mod board;
 
+use rand::prelude::*;
+
 pub fn main() -> Result<(), String> {
     let tile_size = 100;
     let board_size = 8 * tile_size;
@@ -50,6 +52,8 @@ pub fn main() -> Result<(), String> {
     let mut legal_moves: Vec<(usize, usize)> = vec![];
 
     let mut color = 1;
+
+    let mut rng = rand::thread_rng();
 
     'running: loop {
         for event in event_pump.poll_iter() {
@@ -113,7 +117,11 @@ pub fn main() -> Result<(), String> {
         board.draw_pieces(&mut canvas, &pieces_texture, tile_size)?;
 
         canvas.set_blend_mode(BlendMode::Mul);
-        canvas.set_draw_color(Color::RGB(200, 50, 50));
+        canvas.set_draw_color(Color::RGB(
+            rng.gen::<u8>(),
+            rng.gen::<u8>(),
+            rng.gen::<u8>(),
+        ));
 
         for (x, y) in &legal_moves {
             canvas.fill_rect(Rect::new(
