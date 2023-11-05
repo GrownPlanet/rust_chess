@@ -68,6 +68,8 @@ pub fn main() -> Result<(), String> {
         }
 
         // ------------------ updating variables ------------------
+        let tile_size = std::cmp::min(canvas.window().size().0 / 8, canvas.window().size().1 / 8);
+
         // get mouse state
         mouse_state = MouseState::new(&event_pump);
 
