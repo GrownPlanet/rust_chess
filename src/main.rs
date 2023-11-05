@@ -29,6 +29,7 @@ pub fn main() -> Result<(), String> {
 
     let window = video_subsystem
         .window("chess", board_size, board_size)
+        .resizable()
         .position_centered()
         .opengl()
         .build()
